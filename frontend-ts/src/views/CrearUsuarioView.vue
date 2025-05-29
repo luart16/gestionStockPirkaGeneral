@@ -1,42 +1,41 @@
 <template>
-  <div class="login-container">
-    <div class="presentacion">
-      <h1 class="titulo">Pirka</h1>
-      <p class="subtitulo subtitulo-1">Sistema de gestión de inventario.</p>
-      <p class="subtitulo subtitulo-2">Controla y administra tu stock de forma simple y eficiente.</p>
-    </div>
-    <div class="login-box">
-      <form @submit.prevent="loguearse">
-        <input v-model="email" type="email" placeholder="Email" required />
-        <input v-model="contrasenia" type="password" placeholder="Contraseña" required />
-        <button type="submit" class="btn-principal">INICIAR SESIÓN</button>
-      </form>
-    </div>
-  </div>
+     <div v-if="store.Logueado"> 
+        <NavBar />
+        <div class="login-container">
+            <div class="presentacion">
+                <h1 class="titulo">Crear Usuario</h1>
+                <p class="subtitulo subtitulo-1">Formulario para registrar un nuevo usuario.</p>
+            </div>
+
+            <div class="login-box">
+                <form @submit.prevent="crearUsuario">
+                    <input v-model="nombreUsuario" type="text" placeholder="Nombre de usuario" required />
+                    <input v-model="email" type="email" placeholder="Email" required />
+                    <input v-model="contrasenia" type="password" placeholder="Contraseña" required />
+                    <select v-model="rol" required>
+                        <option disabled value="">Selecciona un rol</option>
+                        <option value="encargado">Encargado</option>
+                        <option value="vendedor">Vendedor</option>
+                    </select>
+                    <button type="submit" class="btn-principal">Crear Usuario</button>
+                </form>
+            </div>
+        </div>
+     </div>
+    <div v-else>
+    <RequiereLogin />
+  </div> 
+
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { servicioLogin } from '@/services/login.service';
-import { useRouter } from 'vue-router';
+import RequiereLogin from '@/components/RequiereLogin.vue';
+import NavBar from '@/components/BarraNavegacion.vue'
 import { userStore } from '@/store/user';
 
-const router = useRouter();
 const store = userStore();
 
-const email = ref('');
-const contrasenia = ref('');
-
-const loguearse = async () => {
-  try {
-    const resultado = await servicioLogin.login(email.value, contrasenia.value);
-    console.log('Login exitoso', resultado);
-    store.Loguear(resultado.nombre, resultado.rol);
-    router.push({ name: 'home' });
-  } catch (error) {
-    console.log(error, 'Error al loguearse.');
-  }
-};
+/*ATENCIÓN:    **************los usuarios sólo debe poder crearlos el administrador!!!*/
 
 </script>
 
@@ -61,7 +60,6 @@ const loguearse = async () => {
   text-align: center;
 }
 
-
 .titulo {
   font-size: 48px;
   color: #ff6b8a;
@@ -74,15 +72,15 @@ const loguearse = async () => {
   font-size: 30px;
   color: rgb(70, 40, 110);
   line-height: 1.5;
-  margin: 0; /* elimina espacio excesivo */
+  margin: 0;
 }
 
 .subtitulo-1 {
-  font-weight: 600; /* un poco más gruesa (seminegrita) */
+  font-weight: 600;
 }
 
 .subtitulo-2 {
-  font-weight: 400; /* más liviana que la anterior */
+  font-weight: 400;
 }
 
 .login-box {
@@ -100,22 +98,24 @@ form {
   gap: 20px;
 }
 
-input {
+input,
+select {
   padding: 15px;
   font-size: 16px;
   border: 1px solid #dee2e6;
   border-radius: 4px;
   outline: none;
-  transition: border-color 0.2s ease;
   background-color: #ffffff;
   color: #495057;
 }
 
-input::placeholder {
+input::placeholder,
+select::placeholder {
   color: #6c757d;
 }
 
-input:focus {
+input:focus,
+select:focus {
   border-color: #ff6b8a;
   box-shadow: 0 0 0 2px rgba(255, 107, 138, 0.1);
 }
