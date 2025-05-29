@@ -19,6 +19,9 @@
       <router-link to="/crearSucursal">
         <button class="btn-provisorio">Ir a Crear Sucursal</button>
       </router-link>
+       <router-link to="/traerUsuarios">
+        <button class="btn-provisorio">Usuarios</button>
+      </router-link>
     </div>
   </div>
   <div v-else>

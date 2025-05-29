@@ -1,40 +1,66 @@
 <template>
-     <div v-if="store.Logueado"> 
-        <NavBar />
-        <div class="login-container">
-            <div class="presentacion">
-                <h1 class="titulo">Crear Usuario</h1>
-                <p class="subtitulo subtitulo-1">Formulario para registrar un nuevo usuario.</p>
-            </div>
-
-            <div class="login-box">
-                <form @submit.prevent="crearUsuario">
-                    <input v-model="nombreUsuario" type="text" placeholder="Nombre de usuario" required />
-                    <input v-model="email" type="email" placeholder="Email" required />
-                    <input v-model="contrasenia" type="password" placeholder="Contraseña" required />
-                    <select v-model="rol" required>
-                        <option disabled value="">Selecciona un rol</option>
-                        <option value="encargado">Encargado</option>
-                        <option value="vendedor">Vendedor</option>
-                    </select>
-                    <button type="submit" class="btn-principal">Crear Usuario</button>
-                </form>
-            </div>
+  <div v-if="store.Logueado">
+    <div v-if="store.Rol == 'administrador'">
+      <NavBar />
+      <div class="login-container">
+        <div class="presentacion">
+          <h1 class="titulo">Crear Usuario</h1>
+          <p class="subtitulo subtitulo-1">Formulario para registrar un nuevo usuario.</p>
         </div>
-     </div>
+
+        <div class="login-box">
+          <form @submit.prevent="crearUsuario">
+            <input v-model="usuarioACrear.nombreUsuario" type="text" placeholder="Nombre de usuario" required />
+            <input v-model="usuarioACrear.email" type="email" placeholder="Email" required />
+            <input v-model="usuarioACrear.contrasenia" type="password" placeholder="Contraseña" required />
+            <select v-model="usuarioACrear.rol" required>
+              <option disabled value="">Selecciona un rol</option>
+              <option value="encargado">Encargado</option>
+              <option value="vendedor">Vendedor</option>
+            </select>
+            <button type="submit" class="btn-principal">Crear Usuario</button>
+          </form>
+        </div>
+      </div>
+    </div>
     <div v-else>
+      <p>Opción sólo para administradores</p>
+    </div>
+
+  </div>
+
+  <div v-else>
     <RequiereLogin />
-  </div> 
+  </div>
 
 </template>
 
-<script setup>
+<script setup lang="ts">
 import RequiereLogin from '@/components/RequiereLogin.vue';
 import NavBar from '@/components/BarraNavegacion.vue'
 import { userStore } from '@/store/user';
+import { servicioUsuario } from '@/services/usuario.service';
+import type { DatosUsuarios } from '@/modelos/usuario';
+import { ref } from 'vue';
 
 const store = userStore();
 
+const usuarioACrear = ref < DatosUsuarios > ({
+  _id: '',
+  nombreUsuario: '',
+  email: '',
+  contrasenia: '',
+  rol: 'vendedor',
+})
+
+const crearUsuario = async () => {
+  try {
+    await servicioUsuario.crear(usuarioACrear.value)
+  }
+  catch (error) {
+    console.error("Error creando usuario:", error)
+  }
+}
 /*ATENCIÓN:    **************los usuarios sólo debe poder crearlos el administrador!!!*/
 
 </script>

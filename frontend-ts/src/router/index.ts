@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '@/views/LoginView.vue'
 import HomeView from '@/views/HomeView.vue'
-import CrearUsuarioView from '@/views/CrearUsuarioView.vue'
+import CrearUsuarioView from '@/views/vistasUsuarios/CrearUsuarioView.vue'
 import CrearSucursalView from '@/views/CrearSucursalView.vue'
+import traerTodosLosUsuariosView from '@/views/vistasUsuarios/traerTodosLosUsuariosView.vue'
 
 
 const routes = [
@@ -31,6 +32,11 @@ const routes = [
     component: CrearSucursalView
   },
   
+  {
+    path: '/traerUsuarios',
+    name: 'traerUsuarios',
+    component: traerTodosLosUsuariosView
+  },
 ]
 
 const router = createRouter({
