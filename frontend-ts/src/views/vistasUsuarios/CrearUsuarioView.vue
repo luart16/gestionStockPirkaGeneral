@@ -24,11 +24,9 @@
       </div>
     </div>
     <div v-else>
-      <p>Opción sólo para administradores</p>
+      <RequiereRol />
     </div>
-
   </div>
-
   <div v-else>
     <RequiereLogin />
   </div>
@@ -37,15 +35,18 @@
 
 <script setup lang="ts">
 import RequiereLogin from '@/components/RequiereLogin.vue';
-import NavBar from '@/components/BarraNavegacion.vue'
+import NavBar from '@/components/BarraNavegacion.vue';
+import RequiereRol from '@/components/RequiereRol.vue';
 import { userStore } from '@/store/user';
+import { useRouter } from 'vue-router';
 import { servicioUsuario } from '@/services/usuario.service';
 import type { DatosUsuarios } from '@/modelos/usuario';
 import { ref } from 'vue';
 
 const store = userStore();
+const router = useRouter();
 
-const usuarioACrear = ref < DatosUsuarios > ({
+const usuarioACrear = ref<DatosUsuarios>({
   _id: '',
   nombreUsuario: '',
   email: '',
@@ -56,6 +57,7 @@ const usuarioACrear = ref < DatosUsuarios > ({
 const crearUsuario = async () => {
   try {
     await servicioUsuario.crear(usuarioACrear.value)
+    router.push({ name: 'traerUsuarios' });
   }
   catch (error) {
     console.error("Error creando usuario:", error)

@@ -10,17 +10,13 @@
     <NavBar />
     <div class="home-container">
       <h1>AQUÍ DEBEN IR 3 TARJETAS</h1>
-      <h2>PIEDRAS / PLACAS / PISOS</h2>
-       <!-- Botón provisorio para ir a crear usuario -->
-      <router-link to="/crearUsuario">
-        <button class="btn-provisorio">Ir a Crear Usuario</button>
-      </router-link>
-      <!-- Botón provisorio para ir a crear sucursal -->
-      <router-link to="/crearSucursal">
-        <button class="btn-provisorio">Ir a Crear Sucursal</button>
-      </router-link>
+      <h2>PIEDRAS / PLACAS / PISOS</h2>     
+      
        <router-link to="/traerUsuarios">
         <button class="btn-provisorio">Usuarios</button>
+      </router-link>
+      <router-link to="/traerSucursales">
+        <button class="btn-provisorio">Sucursales</button>
       </router-link>
     </div>
   </div>

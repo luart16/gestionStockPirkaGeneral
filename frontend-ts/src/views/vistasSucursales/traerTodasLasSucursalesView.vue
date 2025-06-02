@@ -3,35 +3,35 @@
     <NavBar />
     <div class="login-container">
       <div class="presentacion">
-        <h1 class="titulo">Usuarios</h1>
-        <p class="subtitulo subtitulo-1">Listado de usuarios registrados en el sistema.</p>
+        <h1 class="titulo">Sucursales</h1>
+        <p class="subtitulo subtitulo-1">Listado de sucursales registradas en el sistema.</p>
       </div>
 
       <div class="login-box">
         <table class="tabla-estado">
           <thead>
             <tr>
-              <th>Nombre usuario</th>
-              <th>Email</th>
-              <th>Rol</th>
+              <th>Nombre sucursal</th>
+              <th>Dirección</th>
+              <th>Teléfono</th>
               <th v-if="store.Rol == 'administrador'">Acciones</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="usuario in usuariosExistentes" :key="usuario._id">
-              <td>{{ usuario.nombreUsuario }}</td>
-              <td>{{ usuario.email }}</td>
-              <td>{{ usuario.rol }}</td>
+            <tr v-for="sucursal in sucursalesExistentes" :key="sucursal._id">
+              <td>{{ sucursal.nombreSucursal }}</td>
+              <td>{{ sucursal.direccion }}</td>
+              <td>{{ sucursal.telefono }}</td>
               <td v-if="store.Rol == 'administrador'">
-                <button @click="editarUsuario(usuario._id)" class="btn-principal">Editar</button>
-                <button @click="eliminarUsuario(usuario._id)" class="btn-principal">Eliminar</button>
+                <button @click="editarSucursal(sucursal._id)" class="btn-principal">Editar</button>
+                <button @click="eliminarSucursal(sucursal._id)" class="btn-principal">Eliminar</button>
               </td>
             </tr>
           </tbody>
         </table>
 
-        <router-link to="/crearUsuario">
-          <button class="btn-principal" style="margin-top: 20px;">Crear usuario</button>
+        <router-link to="/crearSucursal">
+          <button class="btn-principal" style="margin-top: 20px;">Crear nueva sucursal</button>
         </router-link>
       </div>
     </div>
@@ -46,46 +46,46 @@
 import RequiereLogin from '@/components/RequiereLogin.vue';
 import NavBar from '@/components/BarraNavegacion.vue'
 import { userStore } from '@/store/user';
-import { servicioUsuario } from '@/services/usuario.service';
-import type { DatosUsuarios } from '@/modelos/usuario';
-import { ref,onMounted } from 'vue';
+import type { DatosSucursales } from '@/modelos/sucursal';
+import { ref, onMounted } from 'vue';
+import { servicioSucursal } from '@/services/sucursal.servicio';
 
 const store = userStore();
 
-const usuariosExistentes = ref<DatosUsuarios[]>([]);
+const sucursalesExistentes = ref<DatosSucursales[]>([]);
 
-const traerTodos = async () =>{
-    try{
-        const respuesta = await servicioUsuario.traerTodos();
-        usuariosExistentes.value = respuesta;
+const traerTodos = async () => {
+    try {
+        const respuesta = await servicioSucursal.traerTodos();
+        sucursalesExistentes.value = respuesta;
     }
-    catch(error){
-        console.error("Error al traer los usuarios:", error)
+    catch (error) {
+        console.error("Error al traer las sucursales:", error)
 
-    }  
+    }
 
 }
 
-const eliminarUsuario = async (usuarioId: string) =>{
-    try{
-        const respuesta = await servicioUsuario.eliminar(usuarioId);
+const eliminarSucursal = async (sucursalId: string) => {
+    try {
+        const respuesta = await servicioSucursal.eliminar(sucursalId);
         traerTodos();
     }
-    catch(error){
-        console.error("Error al eliminar usuario:", error)
+    catch (error) {
+        console.error("Error al eliminar sucursal:", error)
     }
 }
-const editarUsuario = async (usuarioId: string) =>{
-    try{
-        
-       //completarrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+const editarSucursal = async (sucursalId: string) => {
+    try {
+
+        //completarrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
 
     }
-    catch(error){
-        console.error("Error al editar usuario:", error)
+    catch (error) {
+        console.error("Error al editar sucursal:", error)
     }
 }
-onMounted(()=> {
+onMounted(() => {
     traerTodos();
 })
 

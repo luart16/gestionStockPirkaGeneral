@@ -5,7 +5,7 @@ export const servicioUsuario = {
     crear: async (usuario: DatosUsuarios) => {
         try {
             const respuesta = await axios.post('http://localhost:3000/api/usuario/crear', usuario);
-                console.log('Usuario creado exitosamente.')
+            console.log('Usuario creado exitosamente.')
             return respuesta.data;
         }
         catch (error) {
@@ -14,13 +14,37 @@ export const servicioUsuario = {
         }
     },
 
-    traerTodos: async () =>{
-        try{
+    traerTodos: async () => {
+        try {
             const respuesta = await axios.get('http://localhost:3000/api/usuario/traerTodosLosUsuarios');
             return respuesta.data;
         }
-        catch(error){
+        catch (error) {
             console.log(error, 'Error al traer usuarios.')
+        }
+    },
+
+    eliminar: async (usuarioId: string) => {
+        try {
+            const respuesta = await axios.delete('http://localhost:3000/api/usuario/eliminarUsuario/' + usuarioId);
+            console.log('Usuario eliminado.')
+            return respuesta.data;
+        }
+        catch (error) {
+            console.log(error, 'Error al eliminar usuario.')
+
+        }
+    },
+
+    editar: async (usuarioId: string, usuario: DatosUsuarios ) => {
+        try{
+            const respuesta = await axios.put(`http://localhost:3000/api/usuario/modificarUsuario/${usuarioId}`,usuario);
+            console.log('Usuario eliminado.')
+            return respuesta.data;
+
+        }
+        catch(error){
+            console.log(error, 'Error al editar el usuario.')
         }
     }
 

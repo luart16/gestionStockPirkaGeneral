@@ -1,37 +1,63 @@
 <template>
-     <div v-if="store.Logueado"> 
-        <NavBar />
-        <div class="login-container">
-            <div class="presentacion">
-                <h1 class="titulo">Crear Sucursal</h1>
-                <p class="subtitulo subtitulo-1">Formulario para registrar una nueva sucursal.</p>
-            </div>
-
-            <div class="login-box">
-                <form @submit.prevent="crearSucursal">
-                    <input v-model="nombreSucursal" type="text" placeholder="Nombre de sucursal" required />
-                    <input v-model="direccion" type="text" placeholder="Dirección" required />
-                    <input v-model="telefono" type="text" placeholder="Teléfono" required />                   
-                    <button type="submit" class="btn-principal">Crear Sucursal</button>
-                </form>
-            </div>
+  <div v-if="store.Logueado">
+    <div v-if="store.Rol == 'administrador'">
+      <NavBar />
+      <div class="login-container">
+        <div class="presentacion">
+          <h1 class="titulo">Crear Sucursal</h1>
+          <p class="subtitulo subtitulo-1">Formulario para registrar una nueva sucursal.</p>
         </div>
-     </div>
+
+        <div class="login-box">
+           <form @submit.prevent="crearSucursal">
+            <input v-model="sucursalACrear.nombreSucursal" type="text" placeholder="Nombre de sucursal" required />
+            <input v-model="sucursalACrear.direccion" type="text" placeholder="Dirección" required />
+            <input v-model="sucursalACrear.telefono" type="text" placeholder="Teléfono" required />
+            <button type="submit" class="btn-principal">Crear Sucursal</button>
+          </form> 
+        </div>
+      </div>
+    </div>
     <div v-else>
+      <RequiereRol />
+    </div>
+  </div>
+  <div v-else>
     <RequiereLogin />
-  </div> 
+  </div>
 
 </template>
 
-<script setup>
+<script setup lang="ts">
 import RequiereLogin from '@/components/RequiereLogin.vue';
 import NavBar from '@/components/BarraNavegacion.vue'
 import { userStore } from '@/store/user';
+import { useRouter } from 'vue-router';
+import RequiereRol from '@/components/RequiereRol.vue';
+import { servicioSucursal } from '@/services/sucursal.servicio';
+import type { DatosSucursales } from '@/modelos/sucursal';
+import { ref } from 'vue';
 
 const store = userStore();
+const router = useRouter();
+
+const sucursalACrear = ref<DatosSucursales>({
+  _id: '',
+    nombreSucursal: '',
+    direccion: '',
+    telefono: '',
+})
 
 
-/*ATENCIÓN:    **************las sucursales sólo debe poder crearlas el administrador!!!*/
+const crearSucursal = async () => {
+  try {
+    await servicioSucursal.crear(sucursalACrear.value)
+    router.push({ name: 'traerSucursales' });
+  }
+  catch (error) {
+    console.error("Error creando sucursal:", error)
+  }
+}
 
 
 </script>
