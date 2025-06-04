@@ -48,7 +48,7 @@ import NavBar from '@/components/BarraNavegacion.vue'
 import { userStore } from '@/store/user';
 import type { DatosSucursales } from '@/modelos/sucursal';
 import { ref, onMounted } from 'vue';
-import { servicioSucursal } from '@/services/sucursal.servicio';
+import { servicioSucursal } from '@/services/sucursal.service';
 
 const store = userStore();
 

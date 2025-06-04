@@ -6,7 +6,7 @@
         <router-link to="/home" class="nav-link">
           Inicio
         </router-link>
-        <router-link to="/productos" class="nav-link">
+        <router-link to="/gestionarProductos" class="nav-link">
           Gestionar Productos
         </router-link>
         <router-link to="/materiales" class="nav-link">

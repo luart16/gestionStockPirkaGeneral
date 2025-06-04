@@ -4,21 +4,24 @@
       <NavBar />
       <div class="login-container">
         <div class="presentacion">
-          <h1 class="titulo">Crear Sucursal</h1>
-          <p class="subtitulo subtitulo-1">Formulario para registrar una nueva sucursal.</p>
+          <h1 class="titulo">Crear Producto</h1>
+          <p class="subtitulo subtitulo-1">Formulario para registrar un nuevo producto.</p>
         </div>
 
-        <div class="login-box">
-          <form @submit.prevent="crearSucursal">
-            <input v-model="sucursalACrear.nombreSucursal" type="text" placeholder="Nombre de sucursal" required />
-            <input v-model="sucursalACrear.direccion" type="text" placeholder="Dirección" required />
-            <input v-model="sucursalACrear.telefono" type="text" placeholder="Teléfono" required />
-            <button type="submit" class="btn-principal">Crear Sucursal</button>
-            <router-link to="/traerSucursales">
+         <div class="login-box">
+          <form @submit.prevent="crearProducto">
+            <input v-model="productoACrear.tipoProducto" type="text" placeholder="Tipo de producto" required />
+            <input v-model="productoACrear.nombre" type="text" placeholder="Nombre del producto" required />
+            <input v-model="productoACrear.color" type="text" placeholder="Color" required />
+            <input v-model="productoACrear.descripcion" type="text" placeholder="Descripción del producto" />
+            <input v-model="productoACrear.precio" type="number" placeholder="Precio" />
+            <button type="submit" class="btn-principal">Crear Producto</button>
+            <P>***PONER UN MENSAJE DE ÉXITO AL APRETAR EL BOTÓN DE CREAR PARA SABER SI SE CREÓ Y MANTENER EN ESTA PÁG.</P> 
+            <router-link to="/gestionarProductos">
               <button class="btn-principal">Volver</button>
-            </router-link>
+            </router-link> 
           </form>
-        </div>
+        </div> 
 
       </div>
     </div>
@@ -38,28 +41,30 @@ import NavBar from '@/components/BarraNavegacion.vue'
 import { userStore } from '@/store/user';
 import { useRouter } from 'vue-router';
 import RequiereRol from '@/components/RequiereRol.vue';
-import { servicioSucursal } from '@/services/sucursal.service';
-import type { DatosSucursales } from '@/modelos/sucursal';
+import { servicioProducto } from '@/services/producto.service';
+import type { DatosProductos } from '@/modelos/producto';
 import { ref } from 'vue';
 
 const store = userStore();
 const router = useRouter();
 
-const sucursalACrear = ref<DatosSucursales>({
+const productoACrear = ref<DatosProductos>({
   _id: '',
-  nombreSucursal: '',
-  direccion: '',
-  telefono: '',
+  tipoProducto: '',
+  nombre: '',
+  color: '',
+  descripcion: '',
+  precio: 0,
 })
 
 
-const crearSucursal = async () => {
+const crearProducto = async () => {
   try {
-    await servicioSucursal.crear(sucursalACrear.value)
-    router.push({ name: 'traerSucursales' });
+    await servicioProducto.crear(productoACrear.value)
+    //router.push({ name: 'traerSucursales' });
   }
   catch (error) {
-    console.error("Error creando sucursal:", error)
+    console.error("Error creando producto:", error)
   }
 }
 

@@ -9,14 +9,25 @@
   <div v-if="store.Logueado"><!--El usuario debe estar logueado para que se muestre lo que está dentro de este div-->
     <NavBar />
     <div class="home-container">
-      <h1>AQUÍ DEBEN IR 3 TARJETAS</h1>
-      <h2>PIEDRAS / PLACAS / PISOS</h2>     
-      
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 p-6">
+    <div @click="irA('Piedra')" class="cursor-pointer bg-gray-200 p-6 rounded-lg shadow hover:bg-gray-300">
+      <h2 class="text-xl font-bold">Piedras</h2>
+    </div>
+    <div @click="irA('Placa')" class="cursor-pointer bg-gray-200 p-6 rounded-lg shadow hover:bg-gray-300">
+      <h2 class="text-xl font-bold">Placas</h2>
+    </div>
+    <div @click="irA('Piso')" class="cursor-pointer bg-gray-200 p-6 rounded-lg shadow hover:bg-gray-300">
+      <h2 class="text-xl font-bold">Pisos</h2>
+    </div>
+  </div>      
        <router-link to="/traerUsuarios">
         <button class="btn-provisorio">Usuarios</button>
       </router-link>
       <router-link to="/traerSucursales">
         <button class="btn-provisorio">Sucursales</button>
+      </router-link>
+      <router-link to="/traerProductosPortipo">
+        <button class="btn-provisorio">Productos</button>
       </router-link>
     </div>
   </div>
@@ -26,12 +37,18 @@
 
 </template>
 
-<script setup>
+<script setup lang="ts">
 import RequiereLogin from '@/components/RequiereLogin.vue';
 import NavBar from '@/components/BarraNavegacion.vue'
 import { userStore } from '@/store/user';
+import { useRouter } from 'vue-router';
 
 const store = userStore();
+const router = useRouter();
+
+const irA = (tipo: string) => {
+  router.push(`/productos/${tipo}`);
+}
 
 </script>
 

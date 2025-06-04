@@ -19,6 +19,9 @@
               <option value="vendedor">Vendedor</option>
             </select>
             <button type="submit" class="btn-principal">Crear Usuario</button>
+             <router-link to="/traerUsuarios">
+              <button class="btn-principal">Volver</button>
+            </router-link>
           </form>
         </div>
       </div>
