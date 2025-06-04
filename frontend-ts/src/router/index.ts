@@ -9,6 +9,9 @@ import CrearProductoView from '@/views/vistasProducto/CrearProductoView.vue'
 import GestionarProductosView from '@/views/vistasProducto/GestionarProductosView.vue'
 import traerTodoslosProductosView from '@/views/vistasProducto/traerTodoslosProductosView.vue'
 import TraerProductosPorTipoView from '@/views/vistasProducto/TraerProductosPorTipoView.vue'
+import TraerTodosLosMaterialesView from '@/views/vistasMateriales/TraerTodosLosMaterialesView.vue'
+import GestionarMaterialesView from '@/views/vistasMateriales/GestionarMaterialesView.vue'
+import CrearMaterialView from '@/views/vistasMateriales/CrearMaterialView.vue'
 
 const routes = [
 
@@ -53,6 +56,7 @@ const routes = [
     name: 'gestionarProductos',
     component: GestionarProductosView
   },
+
   {
     path: '/crearProducto',
     name: 'crearProducto',
@@ -69,7 +73,26 @@ const routes = [
     path: '/productos/:tipo',
     name: 'productosPorTipo',
     component: TraerProductosPorTipoView
+  },  
+
+  {
+    path: '/gestionarMateriales',
+    name: 'gestionarMateriales',
+    component: GestionarMaterialesView
   },
+
+  {
+    path: '/crearMaterial',
+    name: 'crearMaterial',
+    component: CrearMaterialView
+  },
+
+  {
+    path: '/traerTodosLosMateriales',
+    name: 'traerTodosLosMateriales',
+    component: TraerTodosLosMaterialesView
+  },
+
 ]
 
 const router = createRouter({

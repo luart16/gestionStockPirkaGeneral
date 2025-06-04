@@ -26,8 +26,8 @@
       <router-link to="/traerSucursales">
         <button class="btn-provisorio">Sucursales</button>
       </router-link>
-      <router-link to="/traerProductosPortipo">
-        <button class="btn-provisorio">Productos</button>
+      <router-link to="/traerTodosLosMateriales">
+        <button class="btn-provisorio">Materiales</button>
       </router-link>
     </div>
   </div>

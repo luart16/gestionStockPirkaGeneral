@@ -4,92 +4,86 @@
             <NavBar />
             <div class="login-container">
                 <div class="presentacion">
-                    <h1 class="titulo">Productos</h1>
-                    <router-link to="/crearProducto">
-                        <button class="btn-provisorio">Crear Nuevo Producto</button>
+                    <h1 class="titulo">Materiales</h1>
+                    <router-link to="/crearMaterial">
+                        <button class="btn-provisorio">Crear Nuevo Material</button>
                     </router-link>
-                    <p class="subtitulo subtitulo-1">Listado de productos registrados en el sistema.</p>
-                    <p>***** aquí poner filtrado por tipo (piedra, placa, piso) y por nombre</p>
+                    <p class="subtitulo subtitulo-1">Listado de materiales registrados en el sistema.</p>
+                    <p>***** aquí poner filtrado por nombre</p>
                 </div>
                 <div class="login-box">
                     <table class="tabla-estado">
                         <thead>
                             <tr>
-                                <th>Tipo de Producto</th>
-                                <th>Nombre de Producto</th>
+                                <th>Nombre de Material</th>
                                 <th>Color</th>
                                 <th>Descripción</th>
+                                <th>Unidad de Medida</th>
                                 <th>Precio</th>
                                 <th>Acciones</th>
-                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="producto in productosExistentes" :key="producto._id">
-                                <td>{{ producto.tipoProducto }}</td>
-                                <td>{{ producto.nombre }}</td>
-                                <td>{{ producto.color }}</td>
-                                <td>{{ producto.descripcion }}</td>
-                                <td>{{ producto.precio }}</td>
+                            <tr v-for="material in materialesExistentes" :key="material._id">
+                                <td>{{ material.nombreMaterial }}</td>
+                                <td>{{ material.color }}</td>
+                                <td>{{ material.descripcion }}</td>
+                                <td>{{ material.unidadDeMedida }}</td>
+                                <td>{{ material.precio }}</td>
                                 <td>
-                                    <button @click="activarModalEditarProducto(producto._id)"
+                                    <button @click="activarModalEditarMaterial(material._id)"
                                         class="btn-principal">Editar</button>
-                                </td>
-                                <td> <button @click="activarModalEliminarrProducto(producto._id)"
+                                    <button @click="activarModalEliminarMaterial(material._id)"
                                         class="btn-principal">Eliminar</button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-
-
                 </div>
             </div>
+
             <!-- MODAL EDITAR -->
             <div v-if="mostrarModalEditar" class="modal-overlay">
                 <div class="modal-content">
-                    <h2>Editar producto</h2>
+                    <h2>Editar material</h2>
                     <div>
-                        <label>Tipo de producto:</label>
-                        <select v-model="productoAEditar.tipoProducto" required>
-                            <option>Piedra</option>
-                            <option>Placa</option>
-                            <option>Piso</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Nombre de producto:</label>
-                        <select v-model="productoAEditar.nombre" required>
-                            <option v-for="(nombre, index) in nombresDeProductos" :key="index">
+                        <label>Nombre de material:</label>
+                        <select v-model="materialAEditar.nombreMaterial" required>
+                            <option v-for="(nombre, index) in nombresDeMateriales" :key="index">
                                 {{ nombre.nombre }}
                             </option>
                         </select>
                     </div>
                     <div>
                         <label>Color:</label>
-                        <input type="text" v-model="productoAEditar.color">
+                        <input type="text" v-model="materialAEditar.color">
                     </div>
                     <div>
                         <label>Descripción:</label>
-                        <input type="text" v-model="productoAEditar.descripcion">
+                        <input type="text" v-model="materialAEditar.descripcion">
+                    </div>
+                    <div>
+                        <label>Unidad de medida:</label>
+                        <input type="text" v-model="materialAEditar.unidadDeMedida">
                     </div>
                     <div>
                         <label>Precio:</label>
-                        <input type="number" v-model="productoAEditar.precio">
+                        <input type="number" v-model="materialAEditar.precio">
                     </div>
                     <div class="modal-actions">
-                        <button @click="editarProducto" class="btn-save">Guardar</button>
+                        <button @click="editarMaterial" class="btn-save">Guardar</button>
                         <button @click="mostrarModalEditar = false" class="btn-cancel">Cancelar</button>
                     </div>
                 </div>
             </div>
+
             <!-- MODAL Eliminar -->
             <div v-if="mostrarModalEliminar" class="modal-overlay">
                 <div class="modal-content">
                     <h2>¿Eliminar producto?</h2>
                     <p>Esta acción no se puede deshacer</p>
                     <div class="modal-actions">
-                        <button @click="eliminarProducto" class="btn-danger">Eliminar</button>
+                        <button @click="eliminarMaterial" class="btn-danger">Eliminar</button>
                         <button @click="mostrarModalEliminar = false" class="btn-cancel">Cancelar</button>
                     </div>
                 </div>
@@ -108,71 +102,69 @@
 
 <script setup lang="ts">
 import RequiereLogin from '@/components/RequiereLogin.vue';
-import RequiereRol from '@/components/RequiereRol.vue';
 import NavBar from '@/components/BarraNavegacion.vue'
+import RequiereRol from '@/components/RequiereRol.vue';
 import { userStore } from '@/store/user';
-import type { DatosProductos } from '@/modelos/producto';
+import type { DatosMateriales } from '@/modelos/material';
 import { ref, onMounted } from 'vue';
-import { servicioProducto } from '@/services/producto.service';
+import { servicioMaterial } from '@/services/material.service';
 
 const store = userStore();
-const idProductoAEditar = ref('');
-const idProductoAEliminar = ref('');
 
 const mostrarModalEditar = ref(false);
-const nombresDeProductos = ref();
+const nombresDeMateriales = ref();
+const idMaterialAEditar = ref('');
+const idMaterialAEliminar = ref('');
 const mostrarModalEliminar = ref(false)
 
-const productoAEditar = ref<DatosProductos>({
+
+const materialAEditar = ref<DatosMateriales>({
     _id: '',
-    tipoProducto: 'Piedra',
-    nombre: 'Ekos',
-    color: 'Gris',
-    descripcion: 'Piedra ecológica',
-    precio: 5520,
+    nombreMaterial: 'Pintura',
+    color: 'Blanco',
+    descripcion: 'Pintura para placa',
+    unidadDeMedida: 'Kg',
+    precio: 0,
 })
 
-const productosExistentes = ref<DatosProductos[]>([]);
+const materialesExistentes = ref<DatosMateriales[]>([]);
 
 const traerTodos = async () => {
     try {
-        const respuesta = await servicioProducto.traerTodos();
-        const respuesta2 = await servicioProducto.traerNombreProductos()
-        nombresDeProductos.value = respuesta2
-        productosExistentes.value = respuesta;
+        const respuesta = await servicioMaterial.traerTodos();
+        materialesExistentes.value = respuesta;
     }
     catch (error) {
-        console.error("Error al traer los productos:", error)
+        console.error("Error al traer los materiales:", error)
 
     }
 
 }
 
-const activarModalEliminarrProducto = async (productoId: string) => {
-    idProductoAEliminar.value = productoId;
+const activarModalEliminarMaterial = async (productoId: string) => {
+    idMaterialAEliminar.value = productoId;
     mostrarModalEliminar.value = true;
 }
 
-const eliminarProducto = async () => {
+const eliminarMaterial = async () => {
     try {
-        const respuesta = await servicioProducto.eliminar(idProductoAEliminar.value);
+        const respuesta = await servicioMaterial.eliminar(idMaterialAEliminar.value);
         mostrarModalEliminar.value = false;
 
         traerTodos();
     }
     catch (error) {
-        console.error("Error al eliminar producto:", error)
+        console.error("Error al eliminar material:", error)
     }
 }
-
-const activarModalEditarProducto = async (productoId: string) => {
-    idProductoAEditar.value = productoId;
+const activarModalEditarMaterial = async (materialId: string) => {
+    idMaterialAEditar.value = materialId;
     mostrarModalEditar.value = true;
 }
 
-const editarProducto = async () => {
+const editarMaterial = async () => {
     try {
-        const respuesta = await servicioProducto.editar(idProductoAEditar.value, productoAEditar.value)
+        const respuesta = await servicioMaterial.editar(idMaterialAEditar.value, materialAEditar.value)
         console.log('Producto editado con éxito.', respuesta)
         traerTodos();
     }
@@ -180,9 +172,6 @@ const editarProducto = async () => {
         console.error("Error al modificar producto:", error)
     }
 }
-
-
-
 onMounted(() => {
     traerTodos();
 })

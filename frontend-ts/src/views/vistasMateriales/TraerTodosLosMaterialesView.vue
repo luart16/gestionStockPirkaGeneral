@@ -3,35 +3,28 @@
         <NavBar />
         <div class="login-container">
             <div class="presentacion">
-                 <h1 class="titulo">Listado de productos registrados en el sistema.</h1> 
-                <p class="subtitulo subtitulo-1">Tipo de producto: {{ tipo }}</p>
-                <P>*****PONER UN FILTRADO POR nombre de producto</P>
-                <p>quiero que se vea la cantidad de producto que hay</p>
-           
-                 <div class="p-4">
-     
-  </div>
-           
-           
+                <h1 class="titulo">Materiales</h1>
+                <p class="subtitulo subtitulo-1">Listado de materiales registrados en el sistema.</p>
+                <P>*****PONER UN FILTRADO POR  NOMBRE</P>
             </div>
             <div class="login-box">
                 <table class="tabla-estado">
                     <thead>
                         <tr>
-                            <th>Tipo de Producto</th>
-                            <th>Nombre de Producto</th>
+                            <th>Nombre de Material</th>
                             <th>Color</th>
                             <th>Descripción</th>
+                            <th>Unidad de Medida</th>
                             <th>Precio</th>                            
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="producto in productosExistentes" :key="producto._id">
-                            <td>{{ producto.tipoProducto }}</td>
-                            <td>{{ producto.nombre }}</td>
-                            <td>{{ producto.color }}</td>
-                            <td>{{ producto.descripcion }}</td>
-                            <td>{{ producto.precio }}</td>                            
+                        <tr v-for="material in materialesExistentes" :key="material._id">
+                            <td>{{ material.nombreMaterial }}</td>
+                            <td>{{ material.color }}</td>
+                            <td>{{ material.descripcion }}</td>
+                            <td>{{ material.unidadDeMedida }}</td>
+                            <td>{{ material.precio }}</td>                            
                         </tr>
                     </tbody>
                 </table>
@@ -50,30 +43,27 @@
 import RequiereLogin from '@/components/RequiereLogin.vue';
 import NavBar from '@/components/BarraNavegacion.vue'
 import { userStore } from '@/store/user';
-import type { DatosProductos } from '@/modelos/producto';
+import type { DatosMateriales } from '@/modelos/material';
 import { ref, onMounted } from 'vue';
-import { servicioProducto } from '@/services/producto.service';
-import { useRoute } from 'vue-router';
-
+import { servicioMaterial } from '@/services/material.service';
 
 const store = userStore();
-const route = useRoute();
 
-const productosExistentes = ref<DatosProductos[]>([]);
-const tipo = ref<string>(route.params.tipo as string);
+const materialesExistentes = ref<DatosMateriales[]>([]);
 
-const traerTodosPorTipo = async () => {
+const traerTodos = async () => {
     try {
-        const respuesta = await servicioProducto.traerPorTipo(tipo.value);
-        productosExistentes.value = respuesta;
+        const respuesta = await servicioMaterial.traerTodos();
+        materialesExistentes.value = respuesta;
     }
     catch (error) {
-        console.error("Error al traer los productos:", error)
-    }
-}
+        console.error("Error al traer los materiales:", error)
 
+    }
+
+}
 onMounted(() => {
-    traerTodosPorTipo();
+    traerTodos();
 })
 
 </script>
@@ -99,17 +89,17 @@ onMounted(() => {
     text-align: center;
 }
 
-.subtitulo {
+.titulo {
     font-size: 48px;
-    color: rgb(70, 40, 110);
+    color: #ff6b8a;
     margin-bottom: 20px;
     font-weight: 600;
     letter-spacing: -0.5px;
 }
 
-.titulo {
+.subtitulo {
     font-size: 30px;
-    color: #ff6b8a;
+    color: rgb(70, 40, 110);
     line-height: 1.5;
     margin: 0;
 }

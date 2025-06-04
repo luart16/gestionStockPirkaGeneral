@@ -9,7 +9,7 @@
         <router-link to="/gestionarProductos" class="nav-link">
           Gestionar Productos
         </router-link>
-        <router-link to="/materiales" class="nav-link">
+        <router-link to="/gestionarMateriales" class="nav-link">
           Gestionar Materiales
         </router-link>
         <router-link to="/stock" class="nav-link">
