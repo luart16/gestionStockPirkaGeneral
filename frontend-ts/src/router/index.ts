@@ -12,6 +12,7 @@ import TraerProductosPorTipoView from '@/views/vistasProducto/TraerProductosPorT
 import TraerTodosLosMaterialesView from '@/views/vistasMateriales/TraerTodosLosMaterialesView.vue'
 import GestionarMaterialesView from '@/views/vistasMateriales/GestionarMaterialesView.vue'
 import CrearMaterialView from '@/views/vistasMateriales/CrearMaterialView.vue'
+import CrearStockProducto from '@/views/VistasStockProductosView.vue/CrearStockProducto.vue'
 
 const routes = [
 
@@ -91,6 +92,12 @@ const routes = [
     path: '/traerTodosLosMateriales',
     name: 'traerTodosLosMateriales',
     component: TraerTodosLosMaterialesView
+  },
+
+  {
+    path: '/crearStockProducto',
+    name: 'crearStockProducto',
+    component: CrearStockProducto
   },
 
 ]

@@ -12,7 +12,7 @@
         <router-link to="/gestionarMateriales" class="nav-link">
           Gestionar Materiales
         </router-link>
-        <router-link to="/stock" class="nav-link">
+        <router-link to="/crearStockProducto" class="nav-link">
           Gestionar Stock
         </router-link>
         <button class="btn-principal" @click="deslogueo">Desloguear</button>

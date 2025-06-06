@@ -24,6 +24,16 @@ export const servicioSucursal = {
          }
      },
 
+     traerNombreSucursales: async () => {
+        try {
+            const respuesta = await axios.get('http://localhost:3000/api/sucursal/traerNombresDeSucursales');
+            return respuesta.data;
+        } catch (error) {
+            console.error(error, 'Error al traer los nombres de sucursales.');
+        }
+    },
+
+
      eliminar: async (sucursalId: string) => {
          try {
              const respuesta = await axios.delete('http://localhost:3000/api/sucursal/eliminarSucursal/' + sucursalId);

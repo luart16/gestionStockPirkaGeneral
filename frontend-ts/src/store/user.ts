@@ -15,4 +15,5 @@ export const userStore = defineStore("User", {
       (this.Usuario = ""), (this.Logueado = false), (this.Rol = "");
     },
   },
+  persist: true // esto es para la persistencia (que no se desloguee al recargar)
 });

@@ -65,5 +65,5 @@ export const servicioProducto = {
         catch (error) {
             console.log(error, 'Error al editar el producto.')
         }
-    }
+    },
 }
